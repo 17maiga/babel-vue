@@ -1,47 +1,103 @@
 <template>
   <header>
+    <div class="logo">The Library of Babel</div>
+    <div class="page_name">{{ currentRouteName }}</div>
     <nav>
-      <RouterLink to="/">
-        <button class="nav-element">Home</button>
-      </RouterLink>
-      <RouterLink to="/search">
-        <button class="nav-element">Search</button>
-      </RouterLink>
+      <button class="nav-element" @click="toggleTheme" id="darkModeToggle" title="Toggle dark mode">
+        <font-awesome-icon icon="fa-solid fa-moon" v-if="theme === ''" />
+        <font-awesome-icon icon="fa-solid fa-sun" v-else />
+      </button>
+      <router-link class="nav-element" to="/" title="Home">
+        <font-awesome-icon icon="fa-solid fa-house" />
+      </router-link>
     </nav>
   </header>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "HeaderComponent",
-};
+  data() {
+    return {
+      theme: "light", // empty means light theme
+    };
+  },
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    },
+  },
+  methods: {
+    toggleTheme() {
+      this.theme = this.theme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", this.theme);
+    },
+  },
+});
 </script>
 
 <style scoped>
 header {
   padding: 5px;
-  border-bottom: 2px solid var(--color-text);
-  background: var(--color-primary);
+  border-bottom: 2px solid var(--color-border);
+  background: var(--color-accent-tertiary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: var(--color-text);
+  width: 33%;
+}
+
+.page_name {
+  color: var(--color-text);
+  width: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 nav {
   display: flex;
-  width: min-content;
+  width: 33%;
   align-content: center;
   align-self: center;
+  justify-content: flex-end;
   flex-direction: row;
+}
+
+nav > a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 .nav-element {
   margin-right: 5px;
-  display: block;
-  border: 2px solid var(--color-text);
-  font-family: Cantarell, sans-serif;
-  background: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-border);
+  background: var(--color-accent-primary);
   color: var(--color-text);
   font-weight: bolder;
   border-radius: 10px;
   cursor: pointer;
-  padding: 5px;
+  padding: 2px 5px;
+  font-size: smaller;
+  font-family: "MuseoModerno", sans-serif;
+}
+
+.nav-element:hover {
+  background: var(--color-accent-secondary);
+}
+
+#darkModeToggle {
+  width: 30px;
+  height: 30px;
 }
 </style>
