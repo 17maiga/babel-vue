@@ -2,10 +2,41 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
-import "./assets/main.css";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+import config from "../conf/config.json";
+
+import {
+  faArrowLeft,
+  faBackward,
+  faBackwardFast,
+  faForward,
+  faForwardFast,
+  faHouse,
+  faMoon,
+  faShuffle,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
+
+import "./assets/base.css";
+
+library.add(
+  faArrowLeft,
+  faBackward,
+  faBackwardFast,
+  faForward,
+  faForwardFast,
+  faHouse,
+  faMoon,
+  faShuffle,
+  faSun
+);
 
 const app = createApp(App);
 
-app.use(router);
+app.config.globalProperties.$api = config.apiURL;
 
+app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(router);
 app.mount("#app");
