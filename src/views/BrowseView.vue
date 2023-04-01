@@ -2,6 +2,7 @@
   <CardComponent>
     <template #card_content>
       <div class="title">Search for a page</div>
+      <div v-if="error" class="error">{{ error }}</div>
       <form id="page-address" @submit.prevent="onFormSubmit">
         <input id="room-hex" v-model="roomId" placeholder="Room ID" />
         <div class="number-inputs">
@@ -58,13 +59,17 @@ export default defineComponent({
     };
   },
   methods: {
-    onFormSubmit() {
+    onFormSubmit(): void {
       const address = [this.roomId, this.wallNo, this.shelfNo, this.bookNo, this.pageNo];
-
+      const error = this.validateAddress(this.roomId, this.wallNo, this.shelfNo, this.bookNo, this.pageNo);
+      if (error) {
+        this.error = error;
+        return;
+      }
       this.$router.push({ path: `/page/${address.join("/")}` });
       this.resetFilters();
     },
-    resetFilters() {
+    resetFilters(): void {
       this.roomId = "";
       this.wallNo = 1;
       this.shelfNo = 1;
@@ -77,13 +82,16 @@ export default defineComponent({
       shelfNo: number | null,
       bookNo: number | null,
       pageNo: number | null
-    ) {
-      if (wallNo === null || shelfNo === null || bookNo === null || pageNo === null) return false;
-
-      if (wallNo > 4 || wallNo < 1) return false;
-      if (shelfNo > 5 || shelfNo < 1) return false;
-      if (bookNo > 32 || bookNo < 1) return false;
-      return !(pageNo > 410 || pageNo < 1);
+    ): string | null {
+      // Validate each address component
+      if (roomId === null || wallNo === null || shelfNo === null || bookNo === null || pageNo === null) 
+        return "Please fill in all fields.";
+      if (!/^[A-Z]+$/.test(roomId)) return "Room ID must be composed of only capital letters.";
+      if (wallNo > 4 || wallNo < 1) return "Wall number must be between 1 and 4.";
+      if (shelfNo > 5 || shelfNo < 1) return "Shelf number must be between 1 and 5.";
+      if (bookNo > 32 || bookNo < 1) return "Book number must be between 1 and 32.";
+      if (pageNo > 410 || pageNo < 1) return "Page number must be between 1 and 410.";
+      return null;
     },
   },
 });
@@ -93,6 +101,12 @@ export default defineComponent({
 .title {
   display: flex;
   justify-content: center;
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: 1.5vh;
+  padding-left: 1vw;
 }
 
 form {
@@ -133,6 +147,7 @@ input::-webkit-inner-spin-button {
 }
 
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 </style>
