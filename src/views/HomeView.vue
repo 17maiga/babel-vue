@@ -10,6 +10,7 @@
         <RouterLink class="link" to="/random">Go to a random page</RouterLink>
         <RouterLink class="link" to="/find">Find text in the Library</RouterLink>
       </div>
+      <RouterLink to="/about" class="link">About</RouterLink>
     </template>
   </ContentComponent>
 </template>

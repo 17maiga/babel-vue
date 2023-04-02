@@ -3,6 +3,7 @@ import HomeView from "@/views/HomeView.vue";
 import BrowseView from "@/views/BrowseView.vue";
 import FindView from "@/views/FindView.vue";
 import PageView from "@/views/PageView.vue";
+import AboutView from "@/views/AboutView.vue";
 
 function generateRandomRoom() {
   const chars: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -51,6 +52,11 @@ const router = createRouter({
       name: "Page",
       props: true,
       component: PageView,
+    },
+    {
+      path: "/about",
+      name: "About",
+      component: AboutView,
     },
   ],
 });
