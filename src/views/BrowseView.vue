@@ -57,6 +57,7 @@ export default defineComponent({
       return "";
     },
     onRoomInput(): void {
+      this.wallNo = -1;
       const error = this.validateRoom();
       if (error !== "") {
         this.error = error;
