@@ -1,23 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=IBM+Plex+Mono&display=swap');
 
 :root {
-    --color-accent-primary: #ffb140;
-    --color-accent-secondary: #bed3ff;
-    --color-accent-tertiary: #6485ff;
-    --color-text: #181d27;
-    --color-border: #181d27;
-    --color-bg: #ffffff;
+    --color-accent-primary: #EB5E28;
+    --color-accent-secondary: #FFFCF2;
+    --color-accent-tertiary: #CCC5B9;
+    --color-text: #252422;
+    --color-border: #252422;
+    --color-bg: #FFFCF2;
     --color-danger: #d72e2e;
     --color-danger-bg: #ff919b;
 }
 
 [data-theme="dark"] {
-    --color-accent-primary: #413e71;
-    --color-accent-secondary: #181d27;
-    --color-accent-tertiary: #040719;
-    --color-text: #ffffff;
-    --color-border: #929292;
-    --color-bg: #000000;
+    --color-accent-primary: #bc3a08;
+    --color-accent-secondary: #252422;
+    --color-accent-tertiary: #5b564d;
+    --color-text: #FFFCF2;
+    --color-border: #CCC5B9;
+    --color-bg: #252422;
     --color-danger: #820a0a;
     --color-danger-bg: #4c0007;
 }
