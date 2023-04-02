@@ -4,7 +4,7 @@
     <div class="page_name">{{ currentRouteName }}</div>
     <nav>
       <button class="nav-element" @click="toggleTheme" id="darkModeToggle" title="Toggle dark mode">
-        <FontAwesomeIcon icon="fa-solid fa-moon" v-if="theme === ''" />
+        <FontAwesomeIcon icon="fa-solid fa-moon" v-if="theme === 'light'" />
         <FontAwesomeIcon icon="fa-solid fa-sun" v-else />
       </button>
       <RouterLink class="nav-element" to="/" title="Home">
@@ -23,7 +23,7 @@ export default defineComponent({
   components: { FontAwesomeIcon },
   data() {
     return {
-      theme: "light", // empty means light theme
+      theme: "light",
     };
   },
   computed: {
