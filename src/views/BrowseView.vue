@@ -1,7 +1,7 @@
 <template>
   <ContentComponent>
     <template #content>
-      <FormHeaderComponent :error="this.error" />
+      <FormHeaderComponent :error="error" />
       <textarea id="room-hex" v-model="roomId" placeholder="Room ID" @input="onRoomInput" />
       <div id="wallNo" v-if="status >= 1">
         <button
@@ -15,14 +15,14 @@
       </div>
       <div id="wrapper">
         <div id="shelves" v-if="status >= 2">
-          <div class="shelf" v-for="shelf in Object.keys(this.shelves)" :key="'shelf-' + shelf">
+          <div class="shelf" v-for="shelf in Object.keys(shelves)" :key="'shelf-' + shelf">
             <button
               class="volume"
-              v-for="volume in Object.keys(this.shelves[shelf])"
+              v-for="volume in Object.keys(shelves[shelf])"
               :key="'shelf-' + shelf + ':volume-' + volume"
               @click="onVolumeSelect(Number(shelf), Number(volume))"
             >
-              {{ this.shelves[shelf][volume].title }}
+              {{ shelves[shelf][volume].title }}
             </button>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default defineComponent({
     return {
       roomId: "",
       wallNo: -1,
-      shelves: {},
+      shelves: {} as Record<string, Record<string, { title: string }>>,
       error: "",
       status: 0,
     };

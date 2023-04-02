@@ -35,6 +35,12 @@ library.add(
 
 const app = createApp(App);
 
+declare module "vue" {
+  interface ComponentCustomProperties {
+    $api: string;
+  }
+}
+
 app.config.globalProperties.$api = config.apiURL;
 
 app.component("font-awesome-icon", FontAwesomeIcon);

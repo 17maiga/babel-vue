@@ -1,17 +1,17 @@
 <template>
   <ContentComponent>
     <template #content>
-      <FormHeaderComponent :error="this.error" />
+      <FormHeaderComponent :error="error" />
       <div class="wrapper">
-        <div class="title">{{ this.title }}</div>
-        <pre class="text-block">{{ this.text }}</pre>
+        <div class="title">{{ title }}</div>
+        <pre class="text-block">{{ text }}</pre>
         <div class="pageNo">
           Page&nbsp;
-          <form @submit.prevent="this.getPage()">
+          <form @submit.prevent="getPage()">
             <input
               id="pageNumber"
-              v-model="this.pageNo"
-              :class="{ invalid: this.invalidForm }"
+              v-model="pageNo"
+              :class="{ invalid: invalidForm }"
               name="pageNumber"
               type="text"
               @input="validateForm"
@@ -20,19 +20,19 @@
           &nbsp;of 410
         </div>
         <div class="actions">
-          <button title="First" @click="this.firstPage()">
+          <button title="First" @click="firstPage()">
             <FontAwesomeIcon icon="fa-solid fa-backward-fast" />
           </button>
-          <button title="Previous" @click="this.prevPage()">
+          <button title="Previous" @click="prevPage()">
             <FontAwesomeIcon icon="fa-solid fa-backward" />
           </button>
-          <button title="Random" @click="this.randomPage()">
+          <button title="Random" @click="randomPage()">
             <FontAwesomeIcon icon="fa-solid fa-shuffle" />
           </button>
-          <button title="Next" @click="this.nextPage()">
+          <button title="Next" @click="nextPage()">
             <FontAwesomeIcon icon="fa-solid fa-forward" />
           </button>
-          <button title="Last" @click="this.lastPage()">
+          <button title="Last" @click="lastPage()">
             <FontAwesomeIcon icon="fa-solid fa-forward-fast" />
           </button>
         </div>
@@ -58,7 +58,7 @@ export default defineComponent({
       text: null as string | null,
       pageNo: this.page,
       invalidForm: false,
-      error: null as string | null,
+      error: "",
     };
   },
   components: { FormHeaderComponent, FontAwesomeIcon, ContentComponent },
@@ -119,7 +119,7 @@ export default defineComponent({
     },
     validateForm() {
       this.invalidForm = isNaN(this.pageNo) || this.pageNo < 1 || this.pageNo > 410;
-      this.error = this.invalidForm ? "Page number must be a number between 1 and 410" : null;
+      this.error = this.invalidForm ? "Page number must be a number between 1 and 410" : "";
     },
   },
   mounted() {

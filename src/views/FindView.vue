@@ -1,7 +1,7 @@
 <template>
   <ContentComponent>
     <template #content>
-      <FormHeaderComponent :error="this.error" />
+      <FormHeaderComponent :error="error" />
       What do you wish to find in the library?
       <div id="findType">
         <button id="title" :class="mode === 'Title' ? 'active' : ''" @click="toggleMode('Title')">
@@ -39,8 +39,8 @@ export default defineComponent({
   components: { FormHeaderComponent, ContentComponent },
   data() {
     return {
-      input: null as string | null,
-      error: null as string | null,
+      input: undefined as string | undefined,
+      error: "",
       mode: "",
     };
   },
@@ -76,7 +76,7 @@ export default defineComponent({
         this.error = "Please select a search option.";
         return true;
       }
-      if (this.input === null || this.input === "") {
+      if (this.input === undefined || this.input === "") {
         this.error = "Can't search for nothing.";
         return true;
       }
@@ -89,7 +89,7 @@ export default defineComponent({
         this.error = "Text can only contain lowercase letters, spaces, commas and periods.";
         return true;
       }
-      this.error = null;
+      this.error = "";
       return false;
     },
   },

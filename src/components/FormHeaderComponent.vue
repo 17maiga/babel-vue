@@ -1,7 +1,7 @@
 <template>
   <div id="formHeader">
     <RouterBackComponent />
-    <div v-if="this.error" id="errorMsg">{{ this.error }}</div>
+    <div v-if="error" id="errorMsg">{{ error }}</div>
   </div>
 </template>
 
