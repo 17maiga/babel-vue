@@ -23,7 +23,5 @@ export default defineComponent({
   border-left: solid 2px var(--color-border);
   border-right: solid 2px var(--color-border);
   padding: 10px;
-  -ms-overflow-y: scroll;
-  overflow-y: scroll;
 }
 </style>
