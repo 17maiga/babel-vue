@@ -18,12 +18,12 @@
     --color-text: #FFFCF2;
     --color-border: #CCC5B9;
     --color-bg: #252422;
-    --color-danger: #820a0a;
+    --color-danger: #c00606;
     --color-danger-bg: #4c0007;
 }
 
 html {
-    font-family: 'MuseoModerno', sans-serif;
+    font-family: Cantarell, sans-serif;
     height: 100vh;
     flex-direction: column;
 }
