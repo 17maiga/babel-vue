@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <slot name="card_content"></slot>
+    <slot name="content"></slot>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "CardComponent",
+  name: "ContentComponent",
 });
 </script>
 
@@ -23,5 +23,7 @@ export default defineComponent({
   border-left: solid 2px var(--color-border);
   border-right: solid 2px var(--color-border);
   padding: 10px;
+  -ms-overflow-y: scroll;
+  overflow-y: scroll;
 }
 </style>

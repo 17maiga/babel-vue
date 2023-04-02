@@ -1,164 +1,180 @@
 <template>
-  <CardComponent>
-    <template #card_content>
-      <div class="header">
-        <RouterBackComponent />
-        <div v-if="this.error" class="error">{{ this.error }}</div>
+  <ContentComponent>
+    <template #content>
+      <FormHeaderComponent :error="this.error" />
+      <textarea id="room-hex" v-model="roomId" placeholder="Room ID" @input="onRoomInput" />
+      <div id="wallNo" v-if="status >= 1">
+        <button
+          v-for="wall in 4"
+          :key="wall"
+          :class="wall - 1 === wallNo ? 'active' : ''"
+          @click="onWallSelect(wall - 1)"
+        >
+          Wall {{ wall }}
+        </button>
       </div>
-      <form id="page-address" @submit.prevent="onFormSubmit">
-        <input id="room-hex" v-model="roomId" placeholder="Room ID" />
-        <div class="number-inputs">
-          <input
-            id="wall-number"
-            v-model="wallNo"
-            class="number-input"
-            placeholder="Wall number"
-            type="number"
-          />
-          <input
-            id="shelf-number"
-            v-model="shelfNo"
-            class="number-input"
-            placeholder="Shelf number"
-            type="number"
-          />
-          <input
-            id="book-number"
-            v-model="bookNo"
-            class="number-input"
-            placeholder="Book number"
-            type="number"
-          />
-          <input
-            id="page-number"
-            v-model="pageNo"
-            class="number-input"
-            placeholder="Page number"
-            type="number"
-          />
+      <div id="wrapper">
+        <div id="shelves" v-if="status >= 2">
+          <div class="shelf" v-for="shelf in Object.keys(this.shelves)" :key="'shelf-' + shelf">
+            <button
+              class="volume"
+              v-for="volume in Object.keys(this.shelves[shelf])"
+              :key="'shelf-' + shelf + ':volume-' + volume"
+              @click="onVolumeSelect(Number(shelf), Number(volume))"
+            >
+              {{ this.shelves[shelf][volume].title }}
+            </button>
+          </div>
         </div>
-        <input type="submit" value="Search" />
-      </form>
+      </div>
     </template>
-  </CardComponent>
+  </ContentComponent>
 </template>
 
 <script lang="ts">
-import CardComponent from "@/components/CardComponent.vue";
+import ContentComponent from "@/components/ContentComponent.vue";
 import { defineComponent } from "vue";
-import RouterBackComponent from "@/components/RouterBackComponent.vue";
+import FormHeaderComponent from "@/components/FormHeaderComponent.vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "BrowseView",
-  components: { RouterBackComponent, CardComponent },
+  components: { FormHeaderComponent, ContentComponent },
   data() {
     return {
       roomId: "",
-      wallNo: null as number | null,
-      shelfNo: null as number | null,
-      bookNo: null as number | null,
-      pageNo: null as number | null,
-      error: null as string | null,
+      wallNo: -1,
+      shelves: {},
+      error: "",
+      status: 0,
     };
   },
   methods: {
-    onFormSubmit(): void {
-      const address = [this.roomId, this.wallNo, this.shelfNo, this.bookNo, this.pageNo];
-      const error = this.validateAddress(
-        this.roomId,
-        this.wallNo,
-        this.shelfNo,
-        this.bookNo,
-        this.pageNo
-      );
-      if (error) {
+    validateRoom(): string {
+      if (this.roomId === "") return "Please enter a room ID.";
+      if (!/^[A-Z0-9]+$/.test(this.roomId))
+        return "Room ID must be composed of only uppercase letters and numbers.";
+      return "";
+    },
+    onRoomInput(): void {
+      const error = this.validateRoom();
+      if (error !== "") {
         this.error = error;
+        this.status = 0;
         return;
       }
-      this.$router.push({ path: `/page/${address.join("/")}` });
-      this.resetFilters();
+      this.status = 1;
+      this.error = "";
     },
-    resetFilters(): void {
-      this.roomId = "";
-      this.wallNo = 1;
-      this.shelfNo = 1;
-      this.bookNo = 1;
-      this.pageNo = 1;
+    onWallSelect(wallNo: number): void {
+      this.wallNo = wallNo;
+      this.status = 2;
+
+      axios
+        .post(this.$api + "/api/get/wall", {
+          room: this.roomId,
+          wall: this.wallNo.toString(),
+        })
+        .then((res) => {
+          this.shelves = res.data.wall;
+        })
+        .catch((error) => {
+          this.error = error.response.data.error;
+        });
     },
-    validateAddress(
-      roomId: string | null,
-      wallNo: number | null,
-      shelfNo: number | null,
-      bookNo: number | null,
-      pageNo: number | null
-    ): string | null {
-      // Validate each address component
-      if (
-        roomId === null ||
-        wallNo === null ||
-        shelfNo === null ||
-        bookNo === null ||
-        pageNo === null
-      )
-        return "Please fill in all fields.";
-      if (!/^[A-Z0-9]+$/.test(roomId))
-        return "Room ID must be composed of only uppercase letters and numbers.";
-      if (wallNo > 4 || wallNo < 1) return "Wall number must be between 1 and 4.";
-      if (shelfNo > 5 || shelfNo < 1) return "Shelf number must be between 1 and 5.";
-      if (bookNo > 32 || bookNo < 1) return "Book number must be between 1 and 32.";
-      if (pageNo > 410 || pageNo < 1) return "Page number must be between 1 and 410.";
-      return null;
+    onVolumeSelect(shelfNo: number, volumeNo: number): void {
+      this.$router.push({
+        path: `/page/${this.roomId}/${this.wallNo + 1}/${shelfNo + 1}/${volumeNo + 1}/1`,
+      });
     },
   },
 });
 </script>
 
 <style scoped>
-.error {
-  color: var(--color-danger);
-  font-size: 1.5vh;
-  padding-left: 1vw;
+#wallNo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 2px;
 }
 
-form {
-  padding: 1vh 1vw;
+#wallNo > button {
+  width: 100%;
+  height: 3vh;
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  background-color: var(--color-accent-secondary);
+  color: var(--color-text);
+  font-family: "MuseoModerno", sans-serif;
+  cursor: pointer;
+}
+
+#wallNo > button.active {
+  background-color: var(--color-accent-primary);
+}
+
+#wrapper {
+  margin-top: 2px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-.number-inputs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-
-input {
-  border: solid 2px var(--color-border);
+#shelves {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  gap: 2px;
+  border: 2px solid var(--color-border);
   border-radius: 5px;
-  margin: 2px;
+  padding: 2px;
+  background-color: var(--color-accent-tertiary);
+  width: min(100%, 1000px);
+  box-sizing: border-box;
+}
+
+.shelf {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 2px 0;
+  padding: 2px;
+  width: 100%;
+  border-bottom: 2px solid var(--color-border);
+  align-self: center;
+}
+
+.volume {
+  display: flex;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  max-width: fit-content;
+  height: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  align-items: center;
   font-family: "MuseoModerno", sans-serif;
-  height: 3vh;
-  background: var(--color-bg);
+  background-color: var(--color-accent-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  cursor: pointer;
   color: var(--color-text);
 }
 
-input[type="submit"] {
-  background: var(--color-accent-primary);
-  cursor: pointer;
-  height: 3.5vh;
+.volume:hover {
+  background-color: var(--color-accent-primary);
 }
 
-input[type="submit"]:hover {
-  background: var(--color-accent-secondary);
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
+textarea {
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "MuseoModerno", sans-serif;
+  resize: vertical;
 }
 </style>

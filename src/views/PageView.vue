@@ -1,10 +1,7 @@
 <template>
-  <card-component>
-    <template #card_content>
-      <div class="header">
-        <RouterBackComponent />
-        <div v-if="this.error" class="error">{{ this.error }}</div>
-      </div>
+  <ContentComponent>
+    <template #content>
+      <FormHeaderComponent :error="this.error" />
       <div class="wrapper">
         <div class="title">{{ this.title }}</div>
         <pre class="text-block">{{ this.text }}</pre>
@@ -41,16 +38,16 @@
         </div>
       </div>
     </template>
-  </card-component>
+  </ContentComponent>
 </template>
 
 <script lang="ts">
-import CardComponent from "@/components/CardComponent.vue";
+import ContentComponent from "@/components/ContentComponent.vue";
 
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { defineComponent } from "vue";
-import RouterBackComponent from "@/components/RouterBackComponent.vue";
+import FormHeaderComponent from "@/components/FormHeaderComponent.vue";
 
 export default defineComponent({
   name: "PageView",
@@ -64,7 +61,7 @@ export default defineComponent({
       error: null as string | null,
     };
   },
-  components: { RouterBackComponent, FontAwesomeIcon, CardComponent },
+  components: { FormHeaderComponent, FontAwesomeIcon, ContentComponent },
   methods: {
     getPage() {
       if (this.invalidForm) return;
@@ -165,16 +162,5 @@ button {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: "MuseoModerno", sans-serif;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-}
-
-.error {
-  color: var(--color-danger);
 }
 </style>

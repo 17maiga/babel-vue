@@ -4,21 +4,23 @@
     <div class="page_name">{{ currentRouteName }}</div>
     <nav>
       <button class="nav-element" @click="toggleTheme" id="darkModeToggle" title="Toggle dark mode">
-        <font-awesome-icon icon="fa-solid fa-moon" v-if="theme === ''" />
-        <font-awesome-icon icon="fa-solid fa-sun" v-else />
+        <FontAwesomeIcon icon="fa-solid fa-moon" v-if="theme === ''" />
+        <FontAwesomeIcon icon="fa-solid fa-sun" v-else />
       </button>
-      <router-link class="nav-element" to="/" title="Home">
-        <font-awesome-icon icon="fa-solid fa-house" />
-      </router-link>
+      <RouterLink class="nav-element" to="/" title="Home">
+        <FontAwesomeIcon icon="fa-solid fa-house" />
+      </RouterLink>
     </nav>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default defineComponent({
   name: "HeaderComponent",
+  components: { FontAwesomeIcon },
   data() {
     return {
       theme: "light", // empty means light theme

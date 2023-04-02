@@ -1,26 +1,26 @@
 <template>
-  <CardComponent>
-    <template #card_content>
+  <ContentComponent>
+    <template #content>
       <div class="paragraph">
         Welcome to the Library of Babel.<br />
         Here, you may observe the variation of the 26 letters.
       </div>
       <div class="actions">
-        <RouterLink class="link" to="/browse">Search for a specific page</RouterLink>
+        <RouterLink class="link" to="/browse">Browse the Library</RouterLink>
         <RouterLink class="link" to="/random">Go to a random page</RouterLink>
-        <RouterLink class="link" to="/find">Find text in the library</RouterLink>
+        <RouterLink class="link" to="/find">Find text in the Library</RouterLink>
       </div>
     </template>
-  </CardComponent>
+  </ContentComponent>
 </template>
 
 <script lang="ts">
-import CardComponent from "@/components/CardComponent.vue";
+import ContentComponent from "@/components/ContentComponent.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "HomeView",
-  components: { CardComponent },
+  components: { ContentComponent },
 });
 </script>
 

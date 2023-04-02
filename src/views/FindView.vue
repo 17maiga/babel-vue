@@ -1,43 +1,59 @@
 <template>
-  <CardComponent>
-    <template #card_content>
-      <div class="header">
-        <RouterBackComponent />
-        <div v-if="this.error" class="error">{{ this.error }}</div>
+  <ContentComponent>
+    <template #content>
+      <FormHeaderComponent :error="this.error" />
+      What do you wish to find in the library?
+      <div id="findType">
+        <button id="title" :class="mode === 'Title' ? 'active' : ''" @click="toggleMode('Title')">
+          Title
+        </button>
+        <button id="text" :class="mode === 'Text' ? 'active' : ''" @click="toggleMode('Text')">
+          Text
+        </button>
       </div>
-      <form @submit.prevent>
-        <textarea v-model="text" placeholder="Enter your text..." @input="validateText" />
+      <form @submit.prevent v-if="mode !== ''">
+        <textarea v-model="input" placeholder="Enter your text..." />
         <div class="actions">
-          <input type="submit" value="Find randomly" @click="find(false)" />
-          <input type="submit" value="Find exactly" @click="find(true)" />
+          <input type="submit" value="Find randomly" v-if="mode === 'Text'" @click="find(false)" />
+          <input type="submit" value="Find exactly" v-if="mode === 'Text'" @click="find(true)" />
+          <input
+            type="submit"
+            value="Find volume"
+            v-else-if="mode === 'Title'"
+            @click="find(true)"
+          />
         </div>
       </form>
     </template>
-  </CardComponent>
+  </ContentComponent>
 </template>
 
 <script lang="ts">
-import CardComponent from "@/components/CardComponent.vue";
+import ContentComponent from "@/components/ContentComponent.vue";
 import { defineComponent } from "vue";
 import axios from "axios";
-import RouterBackComponent from "@/components/RouterBackComponent.vue";
+import FormHeaderComponent from "@/components/FormHeaderComponent.vue";
 
 export default defineComponent({
   name: "FindView",
-  components: { RouterBackComponent, CardComponent },
+  components: { FormHeaderComponent, ContentComponent },
   data() {
     return {
-      text: null as string | null,
+      input: null as string | null,
       error: null as string | null,
+      mode: "",
     };
   },
   methods: {
+    toggleMode(mode: string): void {
+      this.mode = this.mode === mode ? "" : mode;
+    },
     find(exact: boolean): void {
-      if (this.text === null) return;
-      if (!this.validateText()) return;
+      const error = this.validate(this.mode);
+      if (error) return;
       axios
-        .post(this.$api + "/api/find", {
-          text: this.text,
+        .post(this.$api + (this.mode === "Text" ? "/api/find/page" : "/api/find/title"), {
+          input: this.input,
           exact: exact,
         })
         .then((res) => {
@@ -55,29 +71,58 @@ export default defineComponent({
           );
         });
     },
-    validateText(): boolean {
-      if (this.text === null || this.text === "") {
+    validate(mode: string): boolean {
+      if (this.mode === "") {
+        this.error = "Please select a search option.";
+        return true;
+      }
+      if (this.input === null || this.input === "") {
         this.error = "Can't search for nothing.";
-        return false;
+        return true;
       }
-      if (this.text.length > 3200) {
-        this.error = "Text can't be longer than 3200 characters.";
-        return false;
+      const length = mode === "text" ? 3200 : 25;
+      if (this.input.length > length) {
+        this.error = `${mode} can't be longer than ${length} characters.`;
+        return true;
       }
-      const digits = "abcdefghijklmnopqrstuvwxyz. ,";
-      for (let i = 0; i < this.text.length; i++)
-        if (digits.indexOf(this.text[i]) === -1) {
-          this.error = "Text can only contain lowercase letters, spaces, commas and periods.";
-          return false;
-        }
+      if (!/^[a-z ,.]+$/.test(this.input)) {
+        this.error = "Text can only contain lowercase letters, spaces, commas and periods.";
+        return true;
+      }
       this.error = null;
-      return true;
+      return false;
     },
   },
 });
 </script>
 
 <style scoped>
+#findType {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding: 2px 0;
+}
+
+#findType > button {
+  width: 50%;
+  background-color: var(--color-accent-tertiary);
+  border: solid 2px var(--color-border);
+  border-radius: 5px;
+  font-family: "MuseoModerno", sans-serif;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+#findType > button:hover {
+  background-color: var(--color-accent-secondary);
+}
+
+#findType > button.active {
+  background-color: var(--color-accent-primary);
+}
+
 form {
   padding: 1vh 1vw;
   display: flex;
@@ -95,27 +140,15 @@ textarea {
 
 textarea {
   resize: vertical;
-  font-family: "IBM Plex Mono", monospace;
 }
 
-input {
+input[type="submit"] {
   background: var(--color-accent-primary);
   height: 3vh;
 }
 
 input:hover {
   background: var(--color-accent-secondary);
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-}
-
-.error {
-  color: var(--color-danger);
 }
 
 .actions {
@@ -126,6 +159,21 @@ input:hover {
 }
 
 .actions > input {
-  width: 50%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
 }
 </style>
