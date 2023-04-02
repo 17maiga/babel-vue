@@ -2,9 +2,7 @@
   <CardComponent>
     <template #card_content>
       <div class="header">
-        <button title="Back" @click="$router.back()">
-          <font-awesome-icon icon="fa-solid fa-arrow-left" />
-        </button>
+        <RouterBackComponent />
         <div v-if="this.error" class="error">{{ this.error }}</div>
       </div>
       <form @submit.prevent>
@@ -22,10 +20,11 @@
 import CardComponent from "@/components/CardComponent.vue";
 import { defineComponent } from "vue";
 import axios from "axios";
+import RouterBackComponent from "@/components/RouterBackComponent.vue";
 
 export default defineComponent({
   name: "FindView",
-  components: { CardComponent },
+  components: { RouterBackComponent, CardComponent },
   data() {
     return {
       text: null as string | null,
@@ -86,8 +85,7 @@ form {
 }
 
 input,
-textarea,
-button {
+textarea {
   border: 2px solid var(--color-border);
   border-radius: 5px;
   font-family: "MuseoModerno", sans-serif;

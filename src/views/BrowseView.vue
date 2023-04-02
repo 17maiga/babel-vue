@@ -1,8 +1,10 @@
 <template>
   <CardComponent>
     <template #card_content>
-      <div class="title">Search for a page</div>
-      <div v-if="error" class="error">{{ error }}</div>
+      <div class="header">
+        <RouterBackComponent />
+        <div v-if="this.error" class="error">{{ this.error }}</div>
+      </div>
       <form id="page-address" @submit.prevent="onFormSubmit">
         <input id="room-hex" v-model="roomId" placeholder="Room ID" />
         <div class="number-inputs">
@@ -44,10 +46,11 @@
 <script lang="ts">
 import CardComponent from "@/components/CardComponent.vue";
 import { defineComponent } from "vue";
+import RouterBackComponent from "@/components/RouterBackComponent.vue";
 
 export default defineComponent({
   name: "BrowseView",
-  components: { CardComponent },
+  components: { RouterBackComponent, CardComponent },
   data() {
     return {
       roomId: "",
@@ -111,11 +114,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.title {
-  display: flex;
-  justify-content: center;
-}
-
 .error {
   color: var(--color-danger);
   font-size: 1.5vh;

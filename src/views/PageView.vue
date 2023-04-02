@@ -2,9 +2,7 @@
   <card-component>
     <template #card_content>
       <div class="header">
-        <button title="Back" @click="$router.back()">
-          <font-awesome-icon icon="fa-solid fa-arrow-left" />
-        </button>
+        <RouterBackComponent />
         <div v-if="this.error" class="error">{{ this.error }}</div>
       </div>
       <div class="wrapper">
@@ -52,6 +50,7 @@ import CardComponent from "@/components/CardComponent.vue";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { defineComponent } from "vue";
+import RouterBackComponent from "@/components/RouterBackComponent.vue";
 
 export default defineComponent({
   name: "PageView",
@@ -65,7 +64,7 @@ export default defineComponent({
       error: null as string | null,
     };
   },
-  components: { FontAwesomeIcon, CardComponent },
+  components: { RouterBackComponent, FontAwesomeIcon, CardComponent },
   methods: {
     getPage() {
       if (this.invalidForm) return;
@@ -147,13 +146,13 @@ export default defineComponent({
 }
 
 .actions > button {
-  margin: 0 2px;
+  margin: 2px;
 }
 
 button {
   border: solid 2px var(--color-border);
   border-radius: 5px;
-  background-color: var(--color-bg);
+  background-color: var(--color-accent-tertiary);
   color: var(--color-text);
   cursor: pointer;
 }
