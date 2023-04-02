@@ -61,7 +61,13 @@ export default defineComponent({
   methods: {
     onFormSubmit(): void {
       const address = [this.roomId, this.wallNo, this.shelfNo, this.bookNo, this.pageNo];
-      const error = this.validateAddress(this.roomId, this.wallNo, this.shelfNo, this.bookNo, this.pageNo);
+      const error = this.validateAddress(
+        this.roomId,
+        this.wallNo,
+        this.shelfNo,
+        this.bookNo,
+        this.pageNo
+      );
       if (error) {
         this.error = error;
         return;
@@ -77,16 +83,23 @@ export default defineComponent({
       this.pageNo = 1;
     },
     validateAddress(
-      roomId: string,
+      roomId: string | null,
       wallNo: number | null,
       shelfNo: number | null,
       bookNo: number | null,
       pageNo: number | null
     ): string | null {
       // Validate each address component
-      if (roomId === null || wallNo === null || shelfNo === null || bookNo === null || pageNo === null) 
+      if (
+        roomId === null ||
+        wallNo === null ||
+        shelfNo === null ||
+        bookNo === null ||
+        pageNo === null
+      )
         return "Please fill in all fields.";
-      if (!/^[A-Z]+$/.test(roomId)) return "Room ID must be composed of only capital letters.";
+      if (!/^[A-Z0-9]+$/.test(roomId))
+        return "Room ID must be composed of only uppercase letters and numbers.";
       if (wallNo > 4 || wallNo < 1) return "Wall number must be between 1 and 4.";
       if (shelfNo > 5 || shelfNo < 1) return "Shelf number must be between 1 and 5.";
       if (bookNo > 32 || bookNo < 1) return "Book number must be between 1 and 32.";
