@@ -21,19 +21,19 @@
         </div>
         <div class="actions">
           <button title="First" @click="this.firstPage()">
-            <font-awesome-icon icon="fa-solid fa-backward-fast" />
+            <FontAwesomeIcon icon="fa-solid fa-backward-fast" />
           </button>
           <button title="Previous" @click="this.prevPage()">
-            <font-awesome-icon icon="fa-solid fa-backward" />
+            <FontAwesomeIcon icon="fa-solid fa-backward" />
           </button>
           <button title="Random" @click="this.randomPage()">
-            <font-awesome-icon icon="fa-solid fa-shuffle" />
+            <FontAwesomeIcon icon="fa-solid fa-shuffle" />
           </button>
           <button title="Next" @click="this.nextPage()">
-            <font-awesome-icon icon="fa-solid fa-forward" />
+            <FontAwesomeIcon icon="fa-solid fa-forward" />
           </button>
           <button title="Last" @click="this.lastPage()">
-            <font-awesome-icon icon="fa-solid fa-forward-fast" />
+            <FontAwesomeIcon icon="fa-solid fa-forward-fast" />
           </button>
         </div>
       </div>
@@ -63,11 +63,27 @@ export default defineComponent({
   },
   components: { FormHeaderComponent, FontAwesomeIcon, ContentComponent },
   methods: {
+    getTitle() {
+      axios
+        .post(
+          this.$api + "/api/get/title",
+          {
+            room: this.room,
+            wall: String(Number(this.wall) - 1),
+            shelf: String(Number(this.shelf) - 1),
+            volume: String(Number(this.book) - 1),
+          },
+          { headers: { "Content-Type": "application/json" } }
+        )
+        .then((res) => {
+          this.title = res.data["title"];
+        });
+    },
     getPage() {
       if (this.invalidForm) return;
       axios
         .post(
-          this.$api + "/api/page",
+          this.$api + "/api/get/page",
           {
             room: this.room,
             wall: String(Number(this.wall) - 1),
@@ -107,6 +123,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.getTitle();
     this.getPage();
   },
   updated() {
@@ -144,6 +161,10 @@ export default defineComponent({
 
 .actions > button {
   margin: 2px;
+}
+
+.actions > button:hover {
+  background-color: var(--color-accent-primary);
 }
 
 button {
