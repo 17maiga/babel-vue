@@ -80,7 +80,7 @@ export default defineComponent({
         this.error = "Can't search for nothing.";
         return true;
       }
-      const length = mode === "text" ? 3200 : 25;
+      const length = mode === "Text" ? 3200 : 25;
       if (this.input.length > length) {
         this.error = `${mode} can't be longer than ${length} characters.`;
         return true;
