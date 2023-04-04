@@ -1,7 +1,7 @@
 <template>
   <footer>
     Made by&nbsp;
-    <a href="https://www.17maiga.fr" rel="noreferrer noopener" target="_blank">17maiga</a>
+    <a href="https://17maiga.fr" rel="noreferrer noopener" target="_blank">17maiga</a>
   </footer>
 </template>
 
