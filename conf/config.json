@@ -1,4 +1,4 @@
 {
-  "apiURLDev": "http://localhost:3000",
-  "apiURL": "https://babel-api.17maiga.fr"
+  "apiURL": "https://babel-api.17maiga.fr",
+  "maxRoomIDLength": 150
 }

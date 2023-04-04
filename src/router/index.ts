@@ -5,11 +5,16 @@ import FindView from "@/views/FindView.vue";
 import PageView from "@/views/PageView.vue";
 import AboutView from "@/views/AboutView.vue";
 
+// Import configuration for maximum room ID length.
+import config from "../../conf/config.json";
+
+/** Generate a random room ID. */
 function generateRandomRoom() {
   // Characters to use in the room ID.
   const chars: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let room = "";
-  const len = Math.floor(Math.random() * 150) + 1;
+  // Generate a random length between 1 and the maximum length set in config.json.
+  const len = Math.floor(Math.random() * config.maxRoomIDLength) + 1;
   for (let i = 0; i < len; i++) {
     // Add a random character to the room ID.
     room += chars[Math.floor(Math.random() * chars.length)];
