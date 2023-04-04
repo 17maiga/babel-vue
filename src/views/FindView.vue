@@ -41,13 +41,17 @@ export default defineComponent({
     return {
       input: undefined as string | undefined,
       error: "",
+      // mode represents what we are searching for. Possible values are "Title" and "Text", and the empty string.
+      // Different html elements are shown depending on the value of mode.
       mode: "",
     };
   },
   methods: {
+    /** Toggle the search mode. */
     toggleMode(mode: string): void {
       this.mode = this.mode === mode ? "" : mode;
     },
+    /** Find the search text according to the search mode */
     find(exact: boolean): void {
       const error = this.validate(this.mode);
       if (error) return;
@@ -57,6 +61,7 @@ export default defineComponent({
           exact: exact,
         })
         .then((res) => {
+          // If the search was successful, redirect to the page.
           this.$router.push(
             "/page/" +
               res.data.room +

@@ -5,6 +5,7 @@ import router from "./router";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+// Import local configuration (useful when running the API locally)
 import config from "../conf/config.json";
 
 import {
@@ -35,12 +36,14 @@ library.add(
 
 const app = createApp(App);
 
+// Declare global property types
 declare module "vue" {
   interface ComponentCustomProperties {
     $api: string;
   }
 }
 
+// Set global property for API base URL and maximum room ID length
 app.config.globalProperties.$api = config.apiURL;
 
 app.component("font-awesome-icon", FontAwesomeIcon);

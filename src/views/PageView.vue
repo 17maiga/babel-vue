@@ -63,6 +63,7 @@ export default defineComponent({
   },
   components: { FormHeaderComponent, FontAwesomeIcon, ContentComponent },
   methods: {
+    /** Gets the book title from the API. */
     getTitle() {
       axios
         .post(
@@ -79,6 +80,7 @@ export default defineComponent({
           this.title = res.data["title"];
         });
     },
+    /** Gets the page text from the API. */
     getPage() {
       if (this.invalidForm) return;
       axios
@@ -97,36 +99,47 @@ export default defineComponent({
           this.text = res.data["page"].match(/.{1,80}/g).join("\n");
         });
     },
+    // Navigation methods
+    /** Go to the first page of the book. */
     firstPage() {
       this.pageNo = 1;
       this.getPage();
     },
+    /** Go to the previous page. */
     prevPage() {
       if (this.pageNo > 1) this.pageNo--;
       this.getPage();
     },
+    /** Go to a random page in the book. */
     randomPage() {
+      // Generate a random number between 1 and 410
       this.pageNo = Math.floor(Math.random() * 410) + 1;
       this.getPage();
     },
+    /** Go to the next page. */
     nextPage() {
       if (this.pageNo < 410) this.pageNo++;
       this.getPage();
     },
+    /** Go to the last page of the book. */
     lastPage() {
       this.pageNo = 410;
       this.getPage();
     },
+    /** Validate the form input. */
     validateForm() {
+      // Page number must be a number between 1 and 410
       this.invalidForm = isNaN(this.pageNo) || this.pageNo < 1 || this.pageNo > 410;
       this.error = this.invalidForm ? "Page number must be a number between 1 and 410" : "";
     },
   },
   mounted() {
+    // On mount, get the book title and page text
     this.getTitle();
     this.getPage();
   },
   updated() {
+    // On update, get the page text
     this.getPage();
   },
 });

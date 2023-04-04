@@ -23,15 +23,18 @@ export default defineComponent({
   components: { FontAwesomeIcon },
   data() {
     return {
+      // This represents the current color theme.
       theme: "light",
     };
   },
   computed: {
+    /** Returns the name of the current route. */
     currentRouteName() {
       return this.$route.name;
     },
   },
   methods: {
+    /** Toggle the color theme app-wise */
     toggleTheme() {
       this.theme = this.theme === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", this.theme);

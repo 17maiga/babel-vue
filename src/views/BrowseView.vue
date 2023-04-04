@@ -43,20 +43,31 @@ export default defineComponent({
   data() {
     return {
       roomId: "",
+      // wallNo = -1: no wall selected.
       wallNo: -1,
+      // shelves contains the list of volume titles for each shelf, indexed by shelf number and volume number.
       shelves: {} as Record<string, Record<string, { title: string }>>,
       error: "",
+      // Represents the current stage of the form.
+      // 0: room ID input
+      // 1: wall selection
+      // 2: volume selection
+      // Displayed components are determined by this value.
       status: 0,
     };
   },
   methods: {
+    /** Validates the room ID. */
     validateRoom(): string {
       if (this.roomId === "") return "Please enter a room ID.";
+      // Room ID must be composed of only uppercase letters and numbers.
       if (!/^[A-Z0-9]+$/.test(this.roomId))
         return "Room ID must be composed of only uppercase letters and numbers.";
       return "";
     },
+    /** Called when the room ID input is changed. */
     onRoomInput(): void {
+      // Reset the wall number.
       this.wallNo = -1;
       const error = this.validateRoom();
       if (error !== "") {
@@ -64,26 +75,34 @@ export default defineComponent({
         this.status = 0;
         return;
       }
+      // Proceed to wall selection stage.
       this.status = 1;
       this.error = "";
     },
+    /** Called when a wall is selected. */
     onWallSelect(wallNo: number): void {
+      // Set the wall number.
       this.wallNo = wallNo;
+      // Proceed to volume selection stage.
       this.status = 2;
 
+      // Get the list of volumes for the selected room and wall.
       axios
         .post(this.$api + "/api/get/wall", {
           room: this.roomId,
           wall: this.wallNo.toString(),
         })
         .then((res) => {
+          // Set the list of volumes.
           this.shelves = res.data.wall;
         })
         .catch((error) => {
           this.error = error.response.data.error;
         });
     },
+    /** Called when a volume is selected. */
     onVolumeSelect(shelfNo: number, volumeNo: number): void {
+      // Redirect to the volume page.
       this.$router.push({
         path: `/page/${this.roomId}/${this.wallNo + 1}/${shelfNo + 1}/${volumeNo + 1}/1`,
       });

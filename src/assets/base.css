@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=IBM+Plex+Mono&display=swap');
 
+/* Light (standard) theme */
 :root {
     --color-accent-primary: #EB5E28;
     --color-accent-secondary: #FFFCF2;
@@ -11,6 +12,7 @@
     --color-danger-bg: #ff919b;
 }
 
+/* Dark theme */
 [data-theme="dark"] {
     --color-accent-primary: #bc3a08;
     --color-accent-secondary: #252422;

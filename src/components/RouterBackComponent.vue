@@ -5,6 +5,9 @@
 </template>
 
 <script lang="ts">
+// This component is simply used to go back to the previous page.
+// Turned into a component to avoid code duplication.
+
 import { defineComponent } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 

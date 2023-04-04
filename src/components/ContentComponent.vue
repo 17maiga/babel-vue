@@ -5,6 +5,9 @@
 </template>
 
 <script lang="ts">
+// This component is used to display the content of a page in a container.
+// Turned into a component to avoid code duplication.
+
 import { defineComponent } from "vue";
 
 export default defineComponent({
