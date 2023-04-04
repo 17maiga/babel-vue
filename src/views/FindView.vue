@@ -53,8 +53,10 @@ export default defineComponent({
     },
     /** Find the search text according to the search mode */
     find(exact: boolean): void {
-      const error = this.validate(this.mode);
-      if (error) return;
+      // Validate the input.
+      this.error = this.validate();
+      if (this.error !== "") return;
+      // Send the request to the server.
       axios
         .post(this.$api + (this.mode === "Text" ? "/api/find/page" : "/api/find/title"), {
           input: this.input,
@@ -74,28 +76,26 @@ export default defineComponent({
               "/" +
               String(Number(res.data.page) + 1)
           );
+        })
+        .catch((err) => {
+          console.log(err.response.data["error"]);
         });
     },
-    validate(mode: string): boolean {
-      if (this.mode === "") {
-        this.error = "Please select a search option.";
-        return true;
-      }
-      if (this.input === undefined || this.input === "") {
-        this.error = "Can't search for nothing.";
-        return true;
-      }
-      const length = mode === "Text" ? 3200 : 25;
-      if (this.input.length > length) {
-        this.error = `${mode} can't be longer than ${length} characters.`;
-        return true;
-      }
-      if (!/^[a-z ,.]+$/.test(this.input)) {
-        this.error = "Text can only contain lowercase letters, spaces, commas and periods.";
-        return true;
-      }
-      this.error = "";
-      return false;
+    /** Validate the search input according to the search mode. */
+    validate(): string {
+      // If the mode is not set, we can't search.
+      if (this.mode === "") return "Please select a search option.";
+      // If the input is empty, we can't search.
+      if (this.input === undefined || this.input === "") return "Can't search for nothing.";
+      // Find the maximum length of the input depending on the search mode.
+      const length = this.mode === "Text" ? 3200 : 25;
+      // If the input is too long, we can't search.
+      if (this.input.length > length)
+        return `${this.mode} can't be longer than ${length} characters.`;
+      // If the input is not composed of lowercase letters, spaces, commas and periods only, we can't search.
+      if (!/^[a-z ,.]+$/.test(this.input))
+        return "Text can only contain lowercase letters, spaces, commas and periods.";
+      return "";
     },
   },
 });

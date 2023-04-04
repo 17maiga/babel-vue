@@ -78,6 +78,9 @@ export default defineComponent({
         )
         .then((res) => {
           this.title = res.data["title"];
+        })
+        .catch((err) => {
+          console.log(err.response.data["error"]);
         });
     },
     /** Gets the page text from the API. */
@@ -97,6 +100,9 @@ export default defineComponent({
         )
         .then((res) => {
           this.text = res.data["page"].match(/.{1,80}/g).join("\n");
+        })
+        .catch((err) => {
+          console.log(err.response.data["error"]);
         });
     },
     // Navigation methods

@@ -69,15 +69,14 @@ export default defineComponent({
     onRoomInput(): void {
       // Reset the wall number.
       this.wallNo = -1;
-      const error = this.validateRoom();
-      if (error !== "") {
-        this.error = error;
+      this.error = this.validateRoom();
+      if (this.error !== "") {
+        // Reset to room ID input stage.
         this.status = 0;
         return;
       }
       // Proceed to wall selection stage.
       this.status = 1;
-      this.error = "";
     },
     /** Called when a wall is selected. */
     onWallSelect(wallNo: number): void {
