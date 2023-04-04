@@ -1,7 +1,7 @@
 <template>
   <ContentComponent>
     <template #content>
-      <FormHeaderComponent :error="error" />
+      <PageHeaderComponent :error="error" />
       <div class="wrapper">
         <div class="title">{{ title }}</div>
         <pre class="text-block">{{ text }}</pre>
@@ -47,7 +47,7 @@ import ContentComponent from "@/components/ContentComponent.vue";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { defineComponent } from "vue";
-import FormHeaderComponent from "@/components/FormHeaderComponent.vue";
+import PageHeaderComponent from "@/components/PageHeaderComponent.vue";
 
 export default defineComponent({
   name: "PageView",
@@ -61,7 +61,7 @@ export default defineComponent({
       error: "",
     };
   },
-  components: { FormHeaderComponent, FontAwesomeIcon, ContentComponent },
+  components: { PageHeaderComponent, FontAwesomeIcon, ContentComponent },
   methods: {
     /** Gets the book title from the API. */
     getTitle() {

@@ -1,7 +1,7 @@
 <template>
   <ContentComponent>
     <template #content>
-      <FormHeaderComponent :error="error" />
+      <PageHeaderComponent :error="error" />
       <textarea id="room-hex" v-model="roomId" placeholder="Room ID" @input="onRoomInput" />
       <div id="wallNo" v-if="status >= 1">
         <button
@@ -34,12 +34,12 @@
 <script lang="ts">
 import ContentComponent from "@/components/ContentComponent.vue";
 import { defineComponent } from "vue";
-import FormHeaderComponent from "@/components/FormHeaderComponent.vue";
+import PageHeaderComponent from "@/components/PageHeaderComponent.vue";
 import axios from "axios";
 
 export default defineComponent({
   name: "BrowseView",
-  components: { FormHeaderComponent, ContentComponent },
+  components: { PageHeaderComponent, ContentComponent },
   data() {
     return {
       roomId: "",

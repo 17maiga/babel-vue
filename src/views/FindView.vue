@@ -1,7 +1,7 @@
 <template>
   <ContentComponent>
     <template #content>
-      <FormHeaderComponent :error="error" />
+      <PageHeaderComponent :error="error" />
       What do you wish to find in the library?
       <div id="findType">
         <button id="title" :class="mode === 'Title' ? 'active' : ''" @click="toggleMode('Title')">
@@ -32,11 +32,11 @@
 import ContentComponent from "@/components/ContentComponent.vue";
 import { defineComponent } from "vue";
 import axios from "axios";
-import FormHeaderComponent from "@/components/FormHeaderComponent.vue";
+import PageHeaderComponent from "@/components/PageHeaderComponent.vue";
 
 export default defineComponent({
   name: "FindView",
-  components: { FormHeaderComponent, ContentComponent },
+  components: { PageHeaderComponent, ContentComponent },
   data() {
     return {
       input: undefined as string | undefined,

@@ -6,13 +6,17 @@
 </template>
 
 <script lang="ts">
+// This component is used to display both the return button and the error message for a page.
+// Turned into a component to avoid code duplication.
+
 import RouterBackComponent from "@/components/RouterBackComponent.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "FormHeaderComponent",
+  name: "PageHeaderComponent",
   components: { RouterBackComponent },
   props: {
+    // The error message to display.
     error: {
       type: String,
       required: true,
