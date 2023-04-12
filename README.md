@@ -11,9 +11,11 @@ npm install
 npm run dev
 ```
 
-The project should then be available at [http://localhost:5173](http://localhost:5173).
+The project should then be available at 
+[http://localhost:5173](http://localhost:5173).
 
-This project is also available online at [https://babel.17maiga.fr](https://babel.17maiga.fr)!
+This project is also available online at 
+[https://babel.17maiga.fr](https://babel.17maiga.fr)!
 
 ## Main objectives
 I was inspired by the official [Library of Babel](https://libraryofbabel.info)
@@ -31,5 +33,6 @@ id, wall, shelf and book numbers) through the `/browse` route, browse a book's
 pages through the `/page` route, and find text in the Library through the
 `/find` route. 
 
-The API reference is available at [https://github.com/17maiga/babel-api] or at
-[https://babel-api.17maiga.fr].
+The API reference is available at
+[https://github.com/17maiga/babel-api](https://github.com/17maiga/babel-api) or
+at [https://babel-api.17maiga.fr](https://babel-api.17maiga.fr).
