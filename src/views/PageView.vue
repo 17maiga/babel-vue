@@ -4,7 +4,7 @@
       <PageHeaderComponent :error="error" />
       <div class="wrapper">
         <div class="title">{{ title }}</div>
-        <pre class="text-block">{{ text }}</pre>
+        <pre class="text-block" v-html="text"></pre>
         <div class="pageNo">
           Page&nbsp;
           <form @submit.prevent="getPage()">
@@ -42,18 +42,20 @@
 </template>
 
 <script lang="ts">
-import ContentComponent from "@/components/ContentComponent.vue";
-
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import axios from "axios";
 import { defineComponent } from "vue";
+
+import { useSearchStore } from "@/stores/search";
 import PageHeaderComponent from "@/components/PageHeaderComponent.vue";
+import ContentComponent from "@/components/ContentComponent.vue";
 
 export default defineComponent({
   name: "PageView",
   props: ["room", "wall", "shelf", "book", "page"],
   data() {
     return {
+      store: useSearchStore(),
       title: null as string | null,
       text: null as string | null,
       pageNo: this.page,
@@ -99,7 +101,19 @@ export default defineComponent({
           { headers: { "Content-Type": "application/json" } }
         )
         .then((res) => {
-          this.text = res.data["page"].match(/.{1,80}/g).join("\n");
+          const searchText = this.store.getSearchText();
+          let text = res.data["page"];
+          if (searchText) {
+            const regex = new RegExp(searchText.split("").join("\n?"), "gs");
+            this.text = text
+              .match(/.{1,80}/g)
+              .join("\n")
+              .replace(regex, (match: string) => {
+                return `<span style="background: var(--color-accent-primary);">${match}</span>`;
+              });
+          } else {
+            this.text = text.match(/.{1,80}/g).join("\n");
+          }
         })
         .catch((err) => {
           console.log(err.response.data["error"]);

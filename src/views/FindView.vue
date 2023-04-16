@@ -31,6 +31,7 @@
 <script lang="ts">
 import ContentComponent from "@/components/ContentComponent.vue";
 import { defineComponent } from "vue";
+import { useSearchStore } from "@/stores/search";
 import axios from "axios";
 import PageHeaderComponent from "@/components/PageHeaderComponent.vue";
 
@@ -39,7 +40,8 @@ export default defineComponent({
   components: { PageHeaderComponent, ContentComponent },
   data() {
     return {
-      input: undefined as string | undefined,
+      store: useSearchStore(),
+      input: "",
       error: "",
       // mode represents what we are searching for. Possible values are "Title" and "Text", and the empty string.
       // Different html elements are shown depending on the value of mode.
@@ -64,6 +66,8 @@ export default defineComponent({
         })
         .then((res) => {
           // If the search was successful, redirect to the page.
+          this.store.$reset();
+          if (this.mode === "Text") this.store.setSearchText(this.input);
           this.$router.push(
             "/page/" +
               res.data.room +
@@ -86,7 +90,7 @@ export default defineComponent({
       // If the mode is not set, we can't search.
       if (this.mode === "") return "Please select a search option.";
       // If the input is empty, we can't search.
-      if (this.input === undefined || this.input === "") return "Can't search for nothing.";
+      if (this.input === "") return "Can't search for nothing.";
       // Find the maximum length of the input depending on the search mode.
       const length = this.mode === "Text" ? 3200 : 25;
       // If the input is too long, we can't search.

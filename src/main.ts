@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 
@@ -35,8 +36,8 @@ library.add(
 );
 
 const app = createApp(App);
-
 // Declare global property types
+const pinia = createPinia();
 declare module "vue" {
   interface ComponentCustomProperties {
     $api: string;
@@ -45,7 +46,7 @@ declare module "vue" {
 
 // Set global property for API base URL and maximum room ID length
 app.config.globalProperties.$api = config.apiURL;
-
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(pinia);
 app.use(router);
 app.mount("#app");
