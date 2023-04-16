@@ -43,7 +43,8 @@ export default defineComponent({
       store: useSearchStore(),
       input: "",
       error: "",
-      // mode represents what we are searching for. Possible values are "Title" and "Text", and the empty string.
+      // mode represents what we are searching for.
+      // Possible values are "Title", "Text", and the empty string.
       // Different html elements are shown depending on the value of mode.
       mode: "",
     };

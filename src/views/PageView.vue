@@ -101,19 +101,21 @@ export default defineComponent({
           { headers: { "Content-Type": "application/json" } }
         )
         .then((res) => {
+          // Split the text into lines of 80 characters
           const searchText = this.store.getSearchText();
-          let text = res.data["page"];
+          let text = res.data["page"].match(/.{1,80}/g).join("\n");
+          // If search text is present, highlight it
           if (searchText) {
+            // Create a regex that matches the search text and wraps
+            // it in a span with a background color.
+            // We have to check for newlines between each character
+            // to allow for line breaks in the search text.
             const regex = new RegExp(searchText.split("").join("\n?"), "gs");
-            this.text = text
-              .match(/.{1,80}/g)
-              .join("\n")
-              .replace(regex, (match: string) => {
-                return `<span style="background: var(--color-accent-primary);">${match}</span>`;
-              });
-          } else {
-            this.text = text.match(/.{1,80}/g).join("\n");
+            text = text.replace(regex, (match: string) => {
+              return `<span style="background: var(--color-accent-primary);">${match}</span>`;
+            });
           }
+          this.text = text;
         })
         .catch((err) => {
           console.log(err.response.data["error"]);

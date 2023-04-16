@@ -45,7 +45,8 @@ export default defineComponent({
       roomId: "",
       // wallNo = -1: no wall selected.
       wallNo: -1,
-      // shelves contains the list of volume titles for each shelf, indexed by shelf number and volume number.
+      // shelves contains the list of volume titles for each shelf,
+      // indexed by shelf number and volume number.
       shelves: {} as Record<string, Record<string, { title: string }>>,
       error: "",
       // Represents the current stage of the form.
